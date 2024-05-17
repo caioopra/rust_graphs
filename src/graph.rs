@@ -23,6 +23,8 @@ impl<'a> Graph<'a> {
         self.vertices.insert(id, vertex);
     }
 
+    /// Creates and edge given the two vertices that are on it
+    // TODO: add verification if vertices exist and if edge already does
     fn insert_edge(&'a mut self, u_index: u32, v_index: u32) {
         let u = self.vertices.get(&u_index).unwrap();
         let v = self.vertices.get(&v_index).unwrap();
@@ -58,5 +60,17 @@ mod tests {
         assert_eq!(g.vertices.get(&0).unwrap().label, String::from("Test0"));
         assert_eq!(g.vertices.get(&1).unwrap().index, 1);
         assert_eq!(g.vertices.get(&1).unwrap().label, String::from("Test1"));
+    }
+
+    #[test]
+    fn edge_insertion() {
+        let mut g = Graph::new();
+
+        g.insert_vertex(0, String::from("Test0"));
+        g.insert_vertex(1, String::from("Test1"));
+
+        g.insert_edge(0, 1);
+
+        assert_eq!(g.edges.len(), 1);
     }
 }
