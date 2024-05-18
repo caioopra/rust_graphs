@@ -1,14 +1,16 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crate::vertex::Vertex;
 
 #[derive(Debug)]
-pub struct Edge<'a> {
-    u: &'a Vertex,
-    v: &'a Vertex,
+pub struct Edge {
+    u: Rc<RefCell<Vertex>>,
+    v: Rc<RefCell<Vertex>>,
 }
 
-impl<'a> Edge<'a> {
-    pub fn new(u: &'a Vertex, v: &'a Vertex) -> Self {
+impl Edge {
+    pub fn new(u: Rc<RefCell<Vertex>>, v: Rc<RefCell<Vertex>>) -> Self {
         Edge { u, v }
     }
 }
-
