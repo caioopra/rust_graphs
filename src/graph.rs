@@ -12,7 +12,7 @@ struct Graph {
     edges: HashMap<(u32, u32), Edge>,
 }
 
-impl<'a> Graph {
+impl Graph {
     fn new() -> Graph {
         Graph {
             vertices: HashMap::new(),
@@ -28,7 +28,7 @@ impl<'a> Graph {
 
     /// Creates and edge given the two vertices that are on it
     // TODO: add verification if vertices exist and if edge already does
-    fn insert_edge(&'a mut self, u_index: u32, v_index: u32) {
+    fn insert_edge(& mut self, u_index: u32, v_index: u32) {
         let u = self.vertices.get(&u_index).unwrap();
         let v = self.vertices.get(&v_index).unwrap();
 
@@ -36,8 +36,14 @@ impl<'a> Graph {
 
         self.edges.insert((u_index, v_index), edge);
     }
-}
 
+    fn get_label(&self, index: u32) -> Result<String, String> {
+        match self.vertices.get(&index) {
+            Some(vertex) => Ok(vertex.borrow().label.clone()),
+            None => Err(format!("Vertex with index {} doesn't exist", index)),
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -60,9 +66,9 @@ mod tests {
         assert_eq!(g.vertices.len(), 2);
 
         assert_eq!(g.vertices.get(&0).unwrap().borrow().index, 0);
-        assert_eq!(g.vertices.get(&0).unwrap().borrow().label, String::from("Test0"));
+        assert_eq!(g.get_label(0).unwrap(), String::from("Test0"));
         assert_eq!(g.vertices.get(&1).unwrap().borrow().index, 1);
-        assert_eq!(g.vertices.get(&1).unwrap().borrow().label, String::from("Test1"));
+        assert_eq!(g.get_label(1).unwrap(), String::from("Test1"));
     }
 
     #[test]
