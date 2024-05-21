@@ -13,7 +13,7 @@ struct Graph {
 }
 
 impl Graph {
-    fn new() -> Graph {
+    pub fn new() -> Graph {
         Graph {
             vertices: HashMap::new(),
             edges: HashMap::new(),
@@ -21,14 +21,14 @@ impl Graph {
     }
 
     // TODO: add index verification (must be unique)
-    fn insert_vertex(&mut self, id: u32, label: String) {
+    pub fn insert_vertex(&mut self, id: u32, label: String) {
         let vertex = Vertex::new(id, label);
         self.vertices.insert(id, Rc::new(RefCell::new(vertex)));
     }
 
     /// Creates and edge given the two vertices that are on it
     // TODO: add verification if vertices exist and if edge already does
-    fn insert_edge(& mut self, u_index: u32, v_index: u32) {
+    pub fn insert_edge(&mut self, u_index: u32, v_index: u32) {
         let u = self.vertices.get(&u_index).unwrap();
         let v = self.vertices.get(&v_index).unwrap();
 
@@ -37,11 +37,20 @@ impl Graph {
         self.edges.insert((u_index, v_index), edge);
     }
 
-    fn get_label(&self, index: u32) -> Result<String, String> {
+    /// Gets the label of a a vertex given it's index
+    pub fn get_label(&self, index: u32) -> Result<String, String> {
         match self.vertices.get(&index) {
             Some(vertex) => Ok(vertex.borrow().label.clone()),
             None => Err(format!("Vertex with index {} doesn't exist", index)),
         }
+    }
+
+    pub fn vertices_amount(&self) -> u32 {
+        self.vertices.len() as u32
+    }
+
+    pub fn edges_amount(&self) -> u32 {
+        self.edges.len() as u32
     }
 }
 
@@ -67,6 +76,7 @@ mod tests {
 
         assert_eq!(g.vertices.get(&0).unwrap().borrow().index, 0);
         assert_eq!(g.get_label(0).unwrap(), String::from("Test0"));
+
         assert_eq!(g.vertices.get(&1).unwrap().borrow().index, 1);
         assert_eq!(g.get_label(1).unwrap(), String::from("Test1"));
     }
@@ -81,5 +91,8 @@ mod tests {
         g.insert_edge(0, 1);
 
         assert_eq!(g.edges.len(), 1);
+
+        assert_eq!(g.vertices.get(&0).unwrap().borrow().degree, 1);
+        assert_eq!(g.vertices.get(&1).unwrap().borrow().degree, 1);
     }
 }

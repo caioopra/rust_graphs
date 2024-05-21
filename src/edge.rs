@@ -11,6 +11,8 @@ pub struct Edge {
 
 impl Edge {
     pub fn new(u: Rc<RefCell<Vertex>>, v: Rc<RefCell<Vertex>>) -> Self {
+        Vertex::add_neighbor(u.clone(), v.clone());
+
         Edge { u, v }
     }
 }
