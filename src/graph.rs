@@ -23,7 +23,7 @@ impl Graph {
     // TODO: add index verification (must be unique)
     pub fn insert_vertex(&mut self, id: u32, label: String) {
         let vertex = Vertex::new(id, label);
-        self.vertices.insert(id, Rc::new(RefCell::new(vertex)));
+        self.vertices.insert(id, vertex);
     }
 
     /// Creates and edge given the two vertices that are on it

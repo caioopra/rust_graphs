@@ -12,13 +12,14 @@ pub struct Vertex {
 }
 
 impl Vertex {
-    pub fn new(index: u32, label: String) -> Vertex {
-        Vertex {
+    /// Returns a Reference Counting pointer to a RefCell to a vertex
+    pub fn new(index: u32, label: String) -> VertexPtr {
+        Rc::new(RefCell::new(Vertex {
             index,
             label,
             neighbors: Vec::new(),
             degree: 0,
-        }
+        }))
     }
 
     pub fn add_neighbor(self_rc: VertexPtr, vertex: VertexPtr) {
@@ -51,15 +52,15 @@ mod tests {
     fn vertex_creation() {
         let v = Vertex::new(0, String::from("Test"));
 
-        assert_eq!(v.index, 0);
-        assert_eq!(v.label, String::from("Test"));
-        assert_eq!(v.degree, 0);
+        assert_eq!(v.borrow().index, 0);
+        assert_eq!(v.borrow().label, String::from("Test"));
+        assert_eq!(v.borrow().degree, 0);
     }
 
     #[test]
     fn adding_neigbor() {
-        let u = Rc::new(RefCell::new(Vertex::new(0, String::from("TestU"))));
-        let v = Rc::new(RefCell::new(Vertex::new(1, String::from("TestV"))));
+        let u = Vertex::new(0, String::from("TestU"));
+        let v = Vertex::new(1, String::from("TestV"));
 
         Vertex::add_neighbor(u.clone(), v.clone());
 
