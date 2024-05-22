@@ -4,11 +4,11 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::edge::Edge;
-use crate::vertex::Vertex;
+use crate::vertex::{Vertex, VertexPtr};
 
 #[derive(Debug)]
 struct Graph {
-    vertices: HashMap<u32, Rc<RefCell<Vertex>>>,
+    vertices: HashMap<u32, VertexPtr>,
     edges: HashMap<(u32, u32), Edge>,
 }
 

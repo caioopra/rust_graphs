@@ -1,11 +1,13 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+pub type VertexPtr = Rc<RefCell<Vertex>>;
+
 #[derive(Debug)]
 pub struct Vertex {
     pub index: u32,
     pub label: String,
-    pub neighbors: Vec<Rc<RefCell<Vertex>>>,
+    pub neighbors: Vec<VertexPtr>,
     pub degree: u32,
 }
 
@@ -19,7 +21,7 @@ impl Vertex {
         }
     }
 
-    pub fn add_neighbor(self_rc: Rc<RefCell<Vertex>>, vertex: Rc<RefCell<Vertex>>) {
+    pub fn add_neighbor(self_rc: VertexPtr, vertex: VertexPtr) {
         if !self_rc.borrow().neighbors.contains(&vertex) {
             self_rc.borrow_mut().add_as_neighbor(vertex.clone());
 
@@ -29,7 +31,7 @@ impl Vertex {
         }
     }
 
-    fn add_as_neighbor(&mut self, vertex: Rc<RefCell<Vertex>>) {
+    fn add_as_neighbor(&mut self, vertex: VertexPtr) {
         self.neighbors.push(vertex);
         self.degree += 1;
     }

@@ -1,18 +1,20 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::vertex::Vertex;
+use crate::vertex::{Vertex, VertexPtr};
 
 #[derive(Debug)]
 pub struct Edge {
-    u: Rc<RefCell<Vertex>>,
-    v: Rc<RefCell<Vertex>>,
+    u: VertexPtr,
+    v: VertexPtr,
 }
 
 impl Edge {
-    pub fn new(u: Rc<RefCell<Vertex>>, v: Rc<RefCell<Vertex>>) -> Self {
+    pub fn new(u: VertexPtr, v: VertexPtr) -> Self {
         Vertex::add_neighbor(u.clone(), v.clone());
 
         Edge { u, v }
     }
 }
+
+// TODO: create test foe Edge creation
