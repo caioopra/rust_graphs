@@ -12,7 +12,7 @@ pub struct Vertex {
 }
 
 impl Vertex {
-    /// Returns a Reference Counting pointer to a RefCell to a vertex
+    /// Returns a Reference Counting pointer to a RefCell to a vertex (Rc<RefCell<Vertex>>)
     pub fn new(index: u32, label: String) -> VertexPtr {
         Rc::new(RefCell::new(Vertex {
             index,
