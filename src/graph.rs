@@ -20,15 +20,23 @@ impl Graph {
         }
     }
 
-    // TODO: add index verification (must be unique)
     pub fn insert_vertex(&mut self, id: u32, label: String) {
+        if self.vertex_exist(id) {
+            return;
+        }
+
         let vertex = Vertex::new(id, label);
         self.vertices.insert(id, vertex);
     }
 
-    /// Creates and edge given the two vertices that are on it
-    // TODO: add verification if vertices exist and if edge already does
+    /// Creates and edge given the two vertices that are on it.
+    /// This implementation suport multigraphs, so there can be more than one edge between two
+    /// vertices.
     pub fn insert_edge(&mut self, u_index: u32, v_index: u32) {
+        if !self.vertex_exist(u_index) || !self.vertex_exist(v_index) {
+            return;
+        }
+
         let u = self.vertices.get(&u_index).unwrap();
         let v = self.vertices.get(&v_index).unwrap();
 
@@ -37,7 +45,24 @@ impl Graph {
         self.edges.insert((u_index, v_index), edge);
     }
 
+    pub fn vertex_exist(&self, id: u32) -> bool {
+        self.vertices.contains_key(&id)
+    }
+
+    pub fn edge_exists(&self, u_index: u32, v_index: u32) -> bool {
+        self.edges.contains_key(&(u_index, v_index))
+    }
+
     /// Gets the label of a a vertex given it's index
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - the index of the Vertex which the label is being retrieved
+    ///
+    /// # Returns
+    ///
+    /// A `Result` with `Ok` and the label, or an `Err` saying that the argument vertex doesn't
+    /// exist
     pub fn get_label(&self, index: u32) -> Result<String, String> {
         match self.vertices.get(&index) {
             Some(vertex) => Ok(vertex.borrow().label.clone()),
@@ -45,10 +70,12 @@ impl Graph {
         }
     }
 
+    /// returns the amount of vertices in the graph
     pub fn vertices_amount(&self) -> u32 {
         self.vertices.len() as u32
     }
 
+    /// returns the amount of edges in the graph
     pub fn edges_amount(&self) -> u32 {
         self.edges.len() as u32
     }
@@ -79,6 +106,19 @@ mod tests {
 
         assert_eq!(g.vertices.get(&1).unwrap().borrow().index, 1);
         assert_eq!(g.get_label(1).unwrap(), String::from("Test1"));
+    }
+
+    #[test]
+    fn vertex_unique_id() {
+        let mut g = Graph::new();
+        g.insert_vertex(0, String::from("Test0"));
+
+        assert_eq!(g.vertex_exist(0), true);
+        assert_eq!(g.vertex_exist(10), false);
+
+        g.insert_vertex(0, "Not a vertex".to_string()); // this vertex shouldn't be inserted
+
+        assert_eq!(g.vertices_amount(), 1);
     }
 
     #[test]
