@@ -7,13 +7,18 @@ use crate::vertex::{Vertex, VertexPtr};
 pub struct Edge {
     u: VertexPtr,
     v: VertexPtr,
+    weight: i32,
 }
 
 impl Edge {
     pub fn new(u: VertexPtr, v: VertexPtr) -> Self {
         Vertex::add_neighbor(u.clone(), v.clone());
 
-        Edge { u, v }
+        Edge { u, v, weight: 0 }
+    }
+
+    pub fn weight(&self) -> i32 {
+        self.weight
     }
 }
 

@@ -49,7 +49,7 @@ impl Graph {
         self.vertices.contains_key(&id)
     }
 
-    pub fn edge_exists(&self, u_index: u32, v_index: u32) -> bool {
+    pub fn edge_exist(&self, u_index: u32, v_index: u32) -> bool {
         self.edges.contains_key(&(u_index, v_index))
     }
 
@@ -63,11 +63,33 @@ impl Graph {
     ///
     /// A `Result` with `Ok` and the label, or an `Err` saying that the argument vertex doesn't
     /// exist
-    pub fn get_label(&self, index: u32) -> Result<String, String> {
+    pub fn label(&self, index: u32) -> Result<String, String> {
         match self.vertices.get(&index) {
             Some(vertex) => Ok(vertex.borrow().label.clone()),
             None => Err(format!("Vertex with index {} doesn't exist", index)),
         }
+    }
+
+    /// Returns the degree of a vertex given it's index (-1 if doesn't exist)
+    pub fn degree(&self, index: u32) -> Result<u32, i32> {
+        if self.vertex_exist(index) {
+            return Ok(self.vertices.get(&index).unwrap().borrow().degree);
+        }
+
+        Err(-1)
+    }
+
+    /// Returns the weight of a given index; u and v are interchangeable for this method
+    pub fn weight(&self, u_index: u32, v_index: u32) -> Result<i32, i32> {
+        if self.edge_exist(u_index, v_index) {
+            return Ok(self.edges.get(&(u_index, v_index)).unwrap().weight());
+        }
+
+        if self.edge_exist(v_index, u_index) {
+            return Ok(self.edges.get(&(v_index, u_index)).unwrap().weight());
+        }
+
+        Err(-1)
     }
 
     /// returns the amount of vertices in the graph
@@ -102,10 +124,10 @@ mod tests {
         assert_eq!(g.vertices.len(), 2);
 
         assert_eq!(g.vertices.get(&0).unwrap().borrow().index, 0);
-        assert_eq!(g.get_label(0).unwrap(), String::from("Test0"));
+        assert_eq!(g.label(0).unwrap(), String::from("Test0"));
 
         assert_eq!(g.vertices.get(&1).unwrap().borrow().index, 1);
-        assert_eq!(g.get_label(1).unwrap(), String::from("Test1"));
+        assert_eq!(g.label(1).unwrap(), String::from("Test1"));
     }
 
     #[test]
