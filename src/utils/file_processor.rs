@@ -14,7 +14,19 @@ impl FileProcessor {
             println!("Reading file in path: {}", filename);
         }
 
-        let path: std::path::PathBuf = Path::new("data").join(filename);
+        // this to access files in any place on the root of the project
+        let mut file = "";
+        let mut path = "";
+        if filename.contains("/") {
+            if let Some((remaining, data_file)) = filename.rsplit_once('/') {
+                file = data_file;
+                path = remaining;
+            }
+        } else {
+            file = filename;
+        }
+
+        let path: std::path::PathBuf = Path::new(path).join(file);
 
         // Ok values will be untouched, but if err, will return an Err with the string
         let content = fs::read_to_string(path).map_err(|_| "Couldn't read file from path")?;
@@ -43,14 +55,15 @@ mod tests {
 
     #[test]
     fn test_read_file_success() {
-        let filename = "test_test.net";
+        let file_path = "data/test_test.net";
 
         // preparing test file
         let test_content = "First line\nSecond line\n\n\n";
+        let filename = "test_test.net";
         let test_path = Path::new("data").join(filename);
         fs::write(&test_path, test_content).expect("Failed to write the test file");
 
-        let result = FileProcessor::read(filename, false);
+        let result = FileProcessor::read(file_path, false);
 
         assert!(result.is_ok());
 
