@@ -2,13 +2,25 @@ use std::fs;
 use std::path::Path;
 
 #[derive(Debug)]
+/// FileProcessor is a struct with `read` as main operation, which opens a .net (or other simple text based file, such as .txt)
+/// and stores it in the **content** property as a **String**.
 pub struct FileProcessor {
     content: String,
 }
 
-// for now, the "data" folder is necessary
-// TODO: make generic the folder and filename, throwing a panic in case it doesn't exist
 impl FileProcessor {
+    /// Opens a file and read it's content, storing as a String on the **content** property,
+    /// trimming the empty lines in the end if necessary.
+    ///
+    /// # Arguments
+    ///
+    /// * `filename (&str)` - full path, relative to root of project, to the data source.
+    /// * `verbose (bool)` - print informations usefull for debugging.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` with either the resulting FileProcessor, with the content of the file in the
+    /// `content` propeerty, or a &str with the error.
     pub fn read(filename: &str, verbose: bool) -> Result<Self, &'static str> {
         if verbose {
             println!("Reading file in path: {}", filename);
