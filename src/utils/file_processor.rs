@@ -20,7 +20,7 @@ impl FileProcessor {
     /// # Returns
     ///
     /// A `Result` with either the resulting FileProcessor, with the content of the file in the
-    /// `content` propeerty, or a &str with the error.
+    /// `content` property, or a &str with the error.
     pub fn read(filename: &str, verbose: bool) -> Result<Self, &'static str> {
         if verbose {
             println!("Reading file in path: {}", filename);
@@ -58,6 +58,10 @@ impl FileProcessor {
         }
 
         Ok(FileProcessor { content: processed })
+    }
+
+    pub fn content(&self) -> String {
+        self.content.clone()
     }
 }
 
