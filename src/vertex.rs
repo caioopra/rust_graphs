@@ -36,6 +36,10 @@ impl Vertex {
         self.neighbors.push(vertex);
         self.degree += 1;
     }
+
+    pub fn neighbors(&self) -> &Vec<VertexPtr> {
+        &self.neighbors
+    }
 }
 
 impl PartialEq for Vertex {

@@ -1,4 +1,3 @@
-use std::borrow::BorrowMut;
 use std::collections::HashMap;
 
 use crate::utils::file_processor::FileProcessor;
@@ -9,7 +8,7 @@ use crate::edge::Edge;
 use crate::vertex::{Vertex, VertexPtr};
 
 #[derive(Debug)]
-struct Graph {
+pub struct Graph {
     vertices: HashMap<u32, VertexPtr>,
     edges: HashMap<(u32, u32), Edge>,
 }
@@ -20,6 +19,14 @@ impl Graph {
             vertices: HashMap::new(),
             edges: HashMap::new(),
         }
+    }
+
+    pub fn vertices(&self) -> &HashMap<u32, VertexPtr> {
+        &self.vertices
+    }
+
+    pub fn edges(&self) -> &HashMap<(u32, u32), Edge> {
+        &self.edges
     }
 
     pub fn insert_vertex(&mut self, id: u32, label: String) {
@@ -116,7 +123,7 @@ impl Graph {
     /// * filename: full path starting from the root of the project to the file
     ///
     /// # Returns
-    /// Result with the Graph if file was correctly parsed, else a &str with the error message. 
+    /// Result with the Graph if file was correctly parsed, else a &str with the error message.
     ///
     /// # Example:
     /// ```Rust
