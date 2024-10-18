@@ -74,4 +74,16 @@ mod tests {
         assert_eq!(v.borrow().degree, 1);
         assert_eq!(v.borrow().neighbors.contains(&u), true);
     }
+
+    #[test]
+    fn correct_amount_of_neighbors() {
+        let a = Vertex::new(0, String::from("Test a"));
+        let b = Vertex::new(1, String::from("Test b"));
+        let c = Vertex::new(1, String::from("Test c"));
+        let d = Vertex::new(1, String::from("Test d"));
+        let e = Vertex::new(1, String::from("Test e"));
+
+        Vertex::add_neighbor(a.clone(), b.clone());
+
+    }
 }
