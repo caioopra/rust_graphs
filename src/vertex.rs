@@ -76,6 +76,27 @@ mod tests {
     }
 
     #[test]
+    fn adding_itself_as_neighbor() {
+        let u = Vertex::new(0, String::from("TestU"));
+
+        Vertex::add_neighbor(u.clone(), u.clone());
+
+        assert_eq!(u.borrow().degree, 1);
+        assert_eq!(u.borrow().neighbors.len(), 1);
+    }
+
+    #[test]
+    fn adding_itself_twice() {
+        let u = Vertex::new(0, String::from("TestU"));
+
+        Vertex::add_neighbor(u.clone(), u.clone());
+        Vertex::add_neighbor(u.clone(), u.clone());
+
+        assert_eq!(u.borrow().degree, 1);
+        assert_eq!(u.borrow().neighbors.len(), 1);
+    }
+
+    #[test]
     fn adding_same_neighbor_twice() {
         let u = Vertex::new(0, String::from("TestU"));
         let v = Vertex::new(1, String::from("TestV"));
