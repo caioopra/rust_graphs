@@ -33,4 +33,14 @@ mod tests {
         assert_eq!(edge.u.borrow().index, u.borrow().index);
         assert_eq!(edge.v.borrow().index, v.borrow().index);
     }
+
+    #[test]
+    fn edges_weights() {
+        let u = Vertex::new(0, "U".to_string());
+        let v = Vertex::new(1, "V".to_string());
+
+        let edge = Edge::new(u.clone(), v.clone(), 3.0);
+
+        assert_eq!(edge.weight(), 3.0);
+    }
 }
